@@ -5,12 +5,12 @@ import com.kuzmin.graphqlapi.model.Review;
 import com.kuzmin.graphqlapi.repository.CourseRepository;
 import com.kuzmin.graphqlapi.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.*;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,6 +33,11 @@ public class GraphqlCourseController {
         return this.courseRepository.findByCategory(category);
     }
 
+    @SchemaMapping(typeName = "Course")
+    Flux<Review> reviews(Course course) {
+        return this.reviewRepository.findByCourseId(course.getId());
+    }
+
     @MutationMapping
     Mono<Course> addCourse(@Argument String name, @Argument String category, @Argument
             String description) {
@@ -44,5 +49,13 @@ public class GraphqlCourseController {
                            @Argument Integer rating, @Argument String comment) {
         return this.reviewRepository.save(new Review(null, courseId, reviewerName, rating,
                 comment));
+    }
+
+    @SubscriptionMapping
+    Flux<Review> reviewEvents(@Argument Integer courseId) {
+        return this.courseRepository.findById(courseId)
+                .flatMapMany(review -> this.reviewRepository.findByCourseId(review.getId()))
+                .delayElements(Duration.ofSeconds(1))
+                .take(5);
     }
 }

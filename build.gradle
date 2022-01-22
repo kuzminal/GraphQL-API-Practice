@@ -21,15 +21,15 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc:2.6.2'
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'io.r2dbc:r2dbc-h2'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.6.2'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    runtimeOnly 'io.r2dbc:r2dbc-postgresql:0.8.11.RELEASE'
+    runtimeOnly 'io.r2dbc:r2dbc-h2:0.8.4.RELEASE'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.2'
+    testImplementation 'io.projectreactor:reactor-test:3.4.14'
     testImplementation 'org.springframework.graphql:spring-graphql-test'
 }
 
